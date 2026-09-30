@@ -21,11 +21,12 @@ const pixelAt = (page: Page, x: number, y: number): Promise<number[]> =>
 test('pointer movement produces resampled steps and moves the creature', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#stage')).toHaveAttribute('data-ready', 'true');
-  expect(await readSteps(page)).toBe(0);
+  // Not assumed to be 0: some browsers send a pointer event when the page loads under the pointer.
+  const stepsBefore = await readSteps(page);
 
   await page.mouse.move(60, 200);
   await page.mouse.move(260, 240, { steps: 20 });
-  await expect.poll(() => readSteps(page)).toBeGreaterThan(1);
+  await expect.poll(() => readSteps(page)).toBeGreaterThan(stepsBefore + 1);
 
   // The creature is drawn at the latest resampled position, which is the pointer once it rests.
   await expect.poll(async () => (await pixelAt(page, 260, 240))[3]).toBe(255);
@@ -37,6 +38,7 @@ test('a touch tap is picked up', async ({ page }, testInfo) => {
   test.skip(!testInfo.project.use.hasTouch, 'touch only');
   await page.goto('/');
   await expect(page.locator('#stage')).toHaveAttribute('data-ready', 'true');
+  const stepsBefore = await readSteps(page);
   await page.touchscreen.tap(120, 300);
-  await expect.poll(() => readSteps(page)).toBeGreaterThan(0);
+  await expect.poll(() => readSteps(page)).toBeGreaterThan(stepsBefore);
 });
