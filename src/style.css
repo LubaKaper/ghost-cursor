@@ -16,12 +16,25 @@
 }
 
 :root {
-  /* Placeholder values until checked against liubov-dev.vercel.app. */
-  --paper: #e6e4df;
-  --ink: #111111;
-  --ink-soft: #55534f;
-  --red: #e2231a;
+  color-scheme: dark light;
+  --background: #0b0e14;
+  --text: #e6e9ef;
+  --text-soft: #8a93a6;
+  /* Warm and solid: the creature is the user. */
+  --creature: #ff8a4c;
+  /* Cool and soft: the ghost is the prediction. */
+  --ghost: #d4f3ff;
   --gutter: clamp(16px, 4vw, 48px);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #eef1f5;
+    --text: #14171d;
+    --text-soft: #5a6272;
+    --creature: #e2562a;
+    --ghost: #2b3a55;
+  }
 }
 
 *,
@@ -37,8 +50,8 @@ body {
 }
 
 body {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--background);
+  color: var(--text);
   font-family: 'Onest', system-ui, sans-serif;
   overflow: hidden;
   /* The canvas owns pointer gestures; stop the browser from scrolling or zooming on touch. */
@@ -71,7 +84,7 @@ body {
 
 .intro p {
   margin: 0;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   font-size: 1rem;
   line-height: 1.5;
 }

@@ -24,16 +24,20 @@ export function createStage(canvas: HTMLCanvasElement): Stage {
     stage.context = applyCanvasSize(canvas, stage.size);
     drawPlaceholder(stage);
   });
+  // Colors come from CSS, so switching between light and dark needs a redraw.
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+    drawPlaceholder(stage);
+  });
 
   return stage;
 }
 
-// Day 1 stand-in for the creature: the red circle from the portfolio, resting in the middle.
+// Stand-in for the creature until it exists: a warm dot resting in the middle.
 export function drawPlaceholder(stage: Stage): void {
   const { context, size } = stage;
-  const red = getComputedStyle(document.documentElement).getPropertyValue('--red').trim();
+  const creature = getComputedStyle(document.documentElement).getPropertyValue('--creature');
   context.clearRect(0, 0, size.cssWidthPx, size.cssHeightPx);
-  context.fillStyle = red || '#e2231a';
+  context.fillStyle = creature.trim() || '#ff8a4c';
   context.beginPath();
   context.arc(size.cssWidthPx / 2, size.cssHeightPx / 2, PLACEHOLDER_RADIUS_PX, 0, Math.PI * 2);
   context.fill();
