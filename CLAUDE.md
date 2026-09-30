@@ -21,6 +21,8 @@ Luba Kaper, software engineer (ex-Twitter iOS, now AI engineer). This project ex
 - Do not add `Co-Authored-By` lines, "Generated with" lines, or any mention of Claude in commits, PR descriptions or code comments.
 - Small, focused commits with plain messages in the imperative ("Add constant-velocity baseline"). One logical change per commit.
 - `main` is the production branch. Use short feature branches for anything larger than a small fix.
+- Never use "claude" in any name: branches, files, folders, commit messages, PR titles and descriptions, code comments. Use plain branch names like `day-2-input`.
+- Merge PRs with a regular merge commit, not squash, so every commit stays.
 
 ## Stack
 
@@ -39,6 +41,9 @@ Luba Kaper, software engineer (ex-Twitter iOS, now AI engineer). This project ex
 - `src/metrics/`: rolling error, calibration coverage
 - `src/render/`: creature, ghost, trail and the stats panel
 - `src/app.ts`: wiring only, no logic
+
+The engine is `src/input/`, `src/features/`, `src/model/`, `src/baselines/` and `src/metrics/`. It must stay standalone: no DOM styling, no page layout assumptions, no imports from `src/render/`. Input capture takes the element to listen on as a parameter. This keeps it usable by both the demo page and the future drop-in widget.
+
 - `e2e/`: Playwright tests with synthetic trajectories
 - `docs/`: brief, decisions log, results
 
@@ -89,7 +94,10 @@ Correctness first. When tradeoffs are needed: Simplicity > Readability > Maintai
 
 **UI and accessibility**
 
-- Match Luba's portfolio style (liubov-dev.vercel.app): grey paper background, red and black, Unbounded and Onest fonts. The red creature is the smarter sibling of the red circle on her site.
+- Do not use the portfolio colors. Dark background, near-black with a slight blue tint. Unbounded and Onest fonts.
+- The ghost is a soft glow, pale white to light cyan. Its size and blur come directly from the predicted uncertainty: wide and faint when unsure, small and brighter when confident.
+- The creature is warmer and solid, so it reads as the user, not the prediction.
+- Light mode through `prefers-color-scheme`: pale background, a softer and darker haze.
 - Works with mouse, trackpad, touch and pen (Pointer Events).
 - Respect `prefers-reduced-motion`: keep the prediction, drop trails and wobble.
 - The stats panel is readable, keyboard reachable, and has plain labels (for example "Model error" not "MAE").
