@@ -47,10 +47,12 @@ Luba Kaper, software engineer (ex-Twitter iOS, now AI engineer). This project ex
 Correctness first. When tradeoffs are needed: Simplicity > Readability > Maintainability > Performance.
 
 **Before writing code**
+
 - Read the existing code and follow its patterns. Reuse before adding a new abstraction.
 - State material assumptions in your summary. Record real decisions in `docs/DECISIONS.md` with the reason.
 
 **Code quality**
+
 - Small, focused functions with descriptive names. Early returns over nesting. No hidden side effects.
 - Option objects instead of long parameter lists or boolean flags.
 - Make invalid states hard to represent: use types for shapes like `Vec2`, fixed-length feature arrays, and explicit units (pixels vs normalized) in names.
@@ -58,6 +60,7 @@ Correctness first. When tradeoffs are needed: Simplicity > Readability > Maintai
 - Comments explain why, not what. Especially for the math: say why a formula is used, cite the source if it is not obvious.
 
 **ML-specific rules**
+
 - Every model result is reported next to the baselines. If the model does not beat constant velocity, say so plainly in the UI and the docs. Never hide a losing number.
 - Labels arrive late. A sample can only be trained on after its future position (the prediction horizon) has actually happened. Never train on the future.
 - Predict displacement relative to the current position, not absolute screen coordinates.
@@ -67,6 +70,7 @@ Correctness first. When tradeoffs are needed: Simplicity > Readability > Maintai
 - Any change to features, horizon, model size or learning rate gets a before/after measurement on the fixed synthetic trajectories, logged in `docs/RESULTS.md`.
 
 **Testing**
+
 - Unit tests for every math module: forward pass shapes, a finite-difference gradient check for backprop, loss functions, resampler, ring buffer, metrics and calibration.
 - Regression test for any confirmed bug that can be reproduced deterministically.
 - End-to-end tests drive synthetic pointer paths (circle, zigzag, figure-eight, random walk with a fixed seed) and assert the page runs, the panel updates, and the model's error drops below the constant-velocity baseline on smooth paths.
@@ -74,14 +78,17 @@ Correctness first. When tradeoffs are needed: Simplicity > Readability > Maintai
 - Run `npm run check` (format, lint, typecheck, unit tests) before every commit.
 
 **Performance**
+
 - Budget: the page stays at 60 fps and a training step stays under 2 ms per frame on a normal laptop. Measure with `performance.now()` and show it in a debug view.
 - Optimize only when a measurement shows a real problem. Do not move training to a Web Worker unless the budget is actually exceeded.
 
 **Privacy and safety**
+
 - No network requests at runtime. No analytics. Movement data lives in memory only and is gone on reload.
 - If saving is ever added, it must be opt-in and local only.
 
 **UI and accessibility**
+
 - Match Luba's portfolio style (liubov-dev.vercel.app): grey paper background, red and black, Unbounded and Onest fonts. The red creature is the smarter sibling of the red circle on her site.
 - Works with mouse, trackpad, touch and pen (Pointer Events).
 - Respect `prefers-reduced-motion`: keep the prediction, drop trails and wobble.
@@ -91,6 +98,7 @@ Correctness first. When tradeoffs are needed: Simplicity > Readability > Maintai
 ## Definition of done
 
 A change is done when it is correct, simple, tested, measured where it touches the model, and understandable to another engineer. Before finishing, check:
+
 - Is this the simplest correct solution? Can anything be removed?
 - Is each new abstraction justified?
 - Are edge cases handled (pointer leaves window, tab hidden, resize, very fast flicks, no movement)?

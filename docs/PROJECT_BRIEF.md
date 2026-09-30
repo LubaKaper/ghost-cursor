@@ -19,16 +19,19 @@ It connects to her site, where a red circle already follows the cursor. Ghost Cu
 ## How it works
 
 ### 1. Input
+
 - Capture Pointer Events (mouse, trackpad, touch, pen).
 - Pointer events arrive at uneven times, so resample to a fixed rate (60 Hz) with linear interpolation. The model needs evenly spaced steps.
 - Mark gaps: pointer left the window, tab hidden, or no movement for more than about 300 ms. Do not train across gaps.
 
 ### 2. Features and target
+
 - Input: the last 8 steps of movement as velocity deltas (dx, dy), normalized by viewport size. Relative movement makes the model work anywhere on screen.
 - Target: displacement from the current position to the position 30 steps later (about 500 ms). This is the "horizon."
 - Keep the horizon configurable. Shorter is easier and less impressive, longer is harder and more fun.
 
 ### 3. Baselines (built before the model)
+
 - **Hold:** you will stay where you are.
 - **Constant velocity:** you keep going in the same direction at the same speed.
 - **Constant acceleration:** you keep speeding up or turning at the same rate.
@@ -36,6 +39,7 @@ It connects to her site, where a red circle already follows the cursor. Ghost Cu
 The stats panel shows each one's error next to the model's. The headline number is how much better (or worse) the model is than constant velocity.
 
 ### 4. The model
+
 - A small multilayer network, for example 16 inputs, two hidden layers of 32 with tanh, and 4 outputs.
 - Outputs: mean displacement (x, y) and log standard deviation (x, y). Predicting log standard deviation keeps it positive and stable.
 - Loss: Gaussian negative log-likelihood. It rewards being right and penalizes being confidently wrong.
@@ -43,17 +47,21 @@ The stats panel shows each one's error next to the model's. The headline number 
 - Verify backprop with a finite-difference gradient check in the unit tests.
 
 ### 5. Online training
+
 - Every frame, make a prediction and remember it.
 - A prediction becomes a training example only once its horizon has passed and the real future position is known.
 - Store examples in a ring buffer (for example the last 2,000). Each frame, run one small mini-batch update from the buffer, within the time budget.
 - Controls: reset the model, pause learning, and show a learning curve.
 
 ### 6. Uncertainty you can check
+
 - Draw the ghost as a soft ellipse sized by the predicted standard deviation.
 - Track calibration: for a 2D Gaussian, about 39% of real positions should fall inside the 1-sigma ellipse and about 86% inside the 2-sigma ellipse. Show the real percentages. If the model is overconfident, the panel says so.
 
 ### 7. The stats panel
+
 Plain labels, updated live:
+
 - Model error vs constant velocity vs hold (rolling average in pixels)
 - "Model is X% better than constant velocity" (or worse, stated plainly)
 - Calibration: inside 1 sigma, inside 2 sigma, with the targets
@@ -61,6 +69,7 @@ Plain labels, updated live:
 - A small learning curve
 
 ### 8. The fun layer
+
 - The creature: a red blob with a little personality that follows the real cursor with smooth lag.
 - The ghost: a faint red haze at the predicted position, tightening as the model gets confident.
 - "Pass the mouse" moment: a short prompt suggesting someone else try it, and a note when error jumps.
