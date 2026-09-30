@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A cursor follower that learns how you move. A small neural network trains live in your browser."
+    />
+    <title>Ghost Cursor</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/fonts/unbounded-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <canvas id="stage" aria-hidden="true"></canvas>
+    <header class="intro">
+      <h1>Ghost Cursor</h1>
+      <p>A creature follows your cursor. Its ghost guesses where you will be next.</p>
+    </header>
+    <script type="module" src="/src/app.ts"></script>
+  </body>
+</html>

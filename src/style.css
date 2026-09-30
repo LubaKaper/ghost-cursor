@@ -1,0 +1,77 @@
+/* Fonts are self-hosted so the page makes no third-party requests. */
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/fonts/unbounded-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Onest';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/onest-latin.woff2') format('woff2');
+}
+
+:root {
+  /* Placeholder values until checked against liubov-dev.vercel.app. */
+  --paper: #e6e4df;
+  --ink: #111111;
+  --ink-soft: #55534f;
+  --red: #e2231a;
+  --gutter: clamp(16px, 4vw, 48px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Onest', system-ui, sans-serif;
+  overflow: hidden;
+  /* The canvas owns pointer gestures; stop the browser from scrolling or zooming on touch. */
+  touch-action: none;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.intro {
+  position: relative;
+  padding: var(--gutter);
+  max-width: 36rem;
+  pointer-events: none;
+}
+
+.intro h1 {
+  margin: 0 0 0.5rem;
+  font-family: 'Unbounded', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 6vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.intro p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+}
