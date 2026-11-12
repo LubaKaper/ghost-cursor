@@ -40,7 +40,10 @@ Luba Kaper, software engineer (ex-Twitter iOS, now AI engineer). This project ex
 - `src/baselines/`: hold-position, constant-velocity and constant-acceleration predictors
 - `src/metrics/`: rolling error, calibration coverage
 - `src/render/`: creature, ghost, trail and the stats panel
+- `src/synthetic/`: seeded random generator and the fixed synthetic paths used for measurement
+- `src/config.ts`: engine settings (horizon, idle threshold, baseline windows)
 - `src/app.ts`: wiring only, no logic
+- `scripts/`: measurement scripts (`npm run report`) that print the tables in `docs/RESULTS.md`
 
 The engine is `src/input/`, `src/features/`, `src/model/`, `src/baselines/` and `src/metrics/`. It must stay standalone: no DOM styling, no page layout assumptions, no imports from `src/render/`. Input capture takes the element to listen on as a parameter. This keeps it usable by both the demo page and the future drop-in widget.
 
