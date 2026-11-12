@@ -24,6 +24,8 @@
   --creature: #ff8a4c;
   /* Cool and soft: the ghost is the prediction. */
   --ghost: #d4f3ff;
+  --panel: rgb(20 25 36 / 85%);
+  --panel-border: rgb(255 255 255 / 8%);
   --gutter: clamp(16px, 4vw, 48px);
 }
 
@@ -34,6 +36,8 @@
     --text-soft: #5a6272;
     --creature: #e2562a;
     --ghost: #2b3a55;
+    --panel: rgb(255 255 255 / 85%);
+    --panel-border: rgb(20 23 29 / 10%);
   }
 }
 
@@ -87,4 +91,64 @@ body {
   color: var(--text-soft);
   font-size: 1rem;
   line-height: 1.5;
+}
+
+.stats {
+  position: fixed;
+  right: var(--gutter);
+  bottom: var(--gutter);
+  width: min(22rem, calc(100vw - 2 * var(--gutter)));
+  padding: 1rem 1.125rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  background: var(--panel);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.stats:focus-visible {
+  outline: 2px solid var(--creature);
+  outline-offset: 2px;
+}
+
+.stats h2 {
+  margin: 0 0 0.25rem;
+  font-family: 'Unbounded', system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.stats-note,
+.stats-count {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.stats table {
+  width: 100%;
+  margin: 0.75rem 0;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats th,
+.stats td {
+  padding: 0.25rem 0;
+  text-align: left;
+  font-weight: 400;
+}
+
+.stats thead th {
+  color: var(--text-soft);
+  font-size: 0.75rem;
+}
+
+.stats td {
+  text-align: right;
+}
+
+.stats tr[data-best] th,
+.stats tr[data-best] td {
+  color: var(--text);
+  font-weight: 600;
 }

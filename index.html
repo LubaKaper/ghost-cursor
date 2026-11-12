@@ -24,6 +24,25 @@
       <h1>Ghost Cursor</h1>
       <p>A creature follows your cursor. Its ghost guesses where you will be next.</p>
     </header>
+    <section class="stats" tabindex="0" aria-labelledby="stats-title" data-stats>
+      <h2 id="stats-title">How far off is each guess?</h2>
+      <p class="stats-note" data-stats-note>
+        Average distance between the guess and where you really were 0.5 s later, over your last 10
+        s of movement.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Guess</th>
+            <th scope="col">Average miss</th>
+          </tr>
+        </thead>
+        <tbody data-stats-rows></tbody>
+      </table>
+      <p class="stats-count" data-stats-count>
+        Move the pointer to start. Guesses are scored after 0.5 s.
+      </p>
+    </section>
     <script type="module" src="/src/app.ts"></script>
   </body>
 </html>

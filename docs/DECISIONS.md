@@ -2,6 +2,24 @@
 
 Newest first. Each entry: what we decided, why, and what would make us revisit it.
 
+## 2026-11-12: Day 3 baselines and metrics
+
+**Baselines fit a line or parabola by least squares instead of differencing the last two points.** Fitting several points averages out pixel jitter. Because steps are evenly spaced, the fit is a fixed weighted sum of positions (the Savitzky-Golay idea), computed once per window size.
+
+**Each baseline gets its own window, chosen by measurement.** 4 steps for constant velocity and 8 for constant acceleration, from the tables in `docs/RESULTS.md`. Tying them to the model's history length would have been arbitrary.
+
+**Guesses are measured from the fitted current position, not the raw last point.** One jittery sample should not shift the whole guess.
+
+**The error is the plain average miss in pixels over the last 600 scored guesses (10 s of movement).** It counts large misses in full. A median would hide the moments when the ghost flies off, which are exactly what a viewer notices.
+
+**Every predictor is scored on exactly the same moments.** A guess is made only when the pointer is not idle (still for 300 ms or less) and every predictor has enough history. It is scored when its future arrives. A guess whose future is cut off by a break is dropped for all predictors.
+
+**Synthetic paths round positions to whole pixels.** Mouse positions usually arrive that way. Without it, the shortest windows always win and smoothing looks useless.
+
+**The panel refreshes four times a second, not every frame.** Numbers changing 60 times a second cannot be read and cost layout time.
+
+**Measurement scripts run through Vitest (`npm run report`).** No new dependency, and they import the real engine code. They print tables and do not assert, so they stay out of `npm run check`.
+
 ## 2026-09-30: Day 2 input
 
 **Linear interpolation only between samples less than 100 ms apart.** Pointer events stop while the pointer rests. Interpolating across a 2 second rest would invent a slow glide that never happened, and the model would learn it. For longer gaps the resampler holds the old position until the new sample.
