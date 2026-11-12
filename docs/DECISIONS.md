@@ -2,6 +2,22 @@
 
 Newest first. Each entry: what we decided, why, and what would make us revisit it.
 
+## 2026-09-30: Day 2 input
+
+**Linear interpolation only between samples less than 100 ms apart.** Pointer events stop while the pointer rests. Interpolating across a 2 second rest would invent a slow glide that never happened, and the model would learn it. For longer gaps the resampler holds the old position until the new sample.
+
+**Resampling lags one event.** A step can only be interpolated once the sample after it has arrived, which is typically under 16 ms. The alternative (hold the last position with no lag) makes a staircase out of smooth motion at uneven event rates.
+
+**Held steps keep coming while the pointer rests, for up to 1 second.** A prediction made just before a stop needs its 500 ms future to become a label. After 1 second still, the segment ends. Each step carries `stillForMs`, so the feature stage can drop idle inputs (over 300 ms still) while keeping samples whose future contains the stop. Movement under 0.5 px counts as still, so sensor jitter does not reset the clock.
+
+**What ends a segment:** pointer leaves the listened element, pointer cancel, a lifted finger (it reappears somewhere else), tab hidden, window blur, and 1 second still. A lifted mouse button or a hovering pen does not.
+
+**Coalesced events are used.** High-rate mice report several positions per frame; the browser merges them into one event. Using `getCoalescedEvents` gives the resampler the real path during fast flicks.
+
+**Step times are computed as start + index x step, not accumulated,** so a long session does not drift.
+
+**The trail is 30 steps (500 ms),** the same span as the prediction horizon, so the past you see is as long as the future the ghost will guess. Hidden under reduced motion.
+
 ## 2026-09-30: Look, scope, demo page and modeling choices
 
 **Look: dark, not the portfolio colors.** Near-black background with a slight blue tint. The ghost is a pale white to light cyan glow whose radius and blur come straight from the predicted standard deviation, so uncertainty is something you see, not a number in the panel. The creature is warm and solid so it reads as the user, not the prediction. Light mode via `prefers-color-scheme` uses a pale background and a softer, darker haze. Reduced motion keeps the prediction and drops trails and wobble.
